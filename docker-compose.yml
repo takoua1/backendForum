@@ -1,0 +1,32 @@
+
+
+services:
+  forum-backend:
+    build:
+      context: .
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      APPLICATION_SECURITY_JWT_SECRET_KEY: ${APPLICATION_SECURITY_JWT_SECRET_KEY}
+      SPRING_MAIL_USERNAME: ${SPRING_MAIL_USERNAME}
+      SPRING_MAIL_PASSWORD: ${SPRING_MAIL_PASSWORD}
+    depends_on:
+      - db
+    command: ["./wait-for-it.sh", "db:5432", "--", "java", "-jar", "/forumSocialX.jar"]
+
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: forum
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}  # Utilisation de la variable d'environnement
+    ports:
+      - "5433:5432"  # Assurez-vous que le port de PostgreSQL correspond à ce que vous attendez
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:
