@@ -14,12 +14,8 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ForumSocialX</name>
 	<description>web forum back-end</description>
-
 	<properties>
-		<maven.compiler.source>17</maven.compiler.source>
-		<maven.compiler.target>17</maven.compiler.target>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<file.encoding>UTF-8</file.encoding>
+
 		<java.version>17</java.version>
 		<maven.compiler.parameters>true</maven.compiler.parameters>
 	</properties>
@@ -149,7 +145,6 @@
 		</dependency>
 
 
-
 	</dependencies>
 
 	<build>
@@ -166,15 +161,6 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.2.0</version>
-				<configuration>
-					<encoding>UTF-8</encoding>
-				</configuration>
-			</plugin>
-
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
