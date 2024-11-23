@@ -1,30 +1,31 @@
-# Étape 1 : Utiliser Maven pour compiler le projet
+# Étape 1 : Build avec Maven
 FROM maven:3.8.8-eclipse-temurin-17 AS build
 WORKDIR /app
 
-# Copier les fichiers source
+# Copier le POM et les sources
 COPY pom.xml .
 COPY src ./src
 
-# Compiler et packager l'application
+# Compiler le projet
 RUN mvn clean package -DskipTests
 
-# Étape 2 : Image pour exécuter l'application
+# Étape 2 : Exécution avec une image légère
 FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /app
 
+# Mettre à jour les miroirs et installer bash
+RUN sed -i 's|http://dl-cdn.alpinelinux.org/alpine/|https://mirror.yandex.ru/mirrors/alpine/|g' /etc/apk/repositories && \
+    apk add --no-cache bash
+
 # Copier le JAR depuis l'étape précédente
-COPY --from=build /app/target/forumSocialX-0.0.1-SNAPSHOT.jar /app/forumSocialX.jar
+COPY --from=build /app/target/forumSocialX-0.0.1-SNAPSHOT.jar /forumSocialX.jar
 
-# Ajouter bash pour le script
-RUN apk add --no-cache bash
-
-# Copier le script wait-for-it.sh et le script de démarrage
+# Copier les scripts nécessaires
 COPY ./scripts/wait-for-it.sh /scripts/wait-for-it.sh
-RUN chmod +x /scripts/wait-for-it.sh
-
 COPY ./scripts/start.sh /start.sh
-RUN chmod +x /start.sh
 
-# Démarrer l'application avec le script
-ENTRYPOINT ["/bin/sh", "/start.sh"]
+# Donner les permissions d'exécution
+RUN chmod +x /scripts/wait-for-it.sh /start.sh
+
+# Configurer l'entrypoint
+ENTRYPOINT ["/bin/bash", "/start.sh"]
