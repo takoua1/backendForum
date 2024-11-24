@@ -1,5 +1,3 @@
-
-
 services:
   forum-backend:
     build:
@@ -16,17 +14,16 @@ services:
       PORT: 8084
     depends_on:
       - db
-    command: [ "./wait-for-it.sh", "db:5432", "-t", "120", "--", "java", "-jar", "/forumSocialX.jar" ]
-
+    command: [ "./wait-for-it.sh", "dpg-ct1onv9opnds73fmddb0-a.oregon-postgres.render.com:5432", "-t", "120", "--", "java", "-jar", "/forumSocialX.jar" ]
 
   db:
     image: postgres:16
     environment:
       POSTGRES_DB: forum
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}  # Utilisation de la variable d'environnement
+      POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
     ports:
-      - "5433:5432"  # Assurez-vous que le port de PostgreSQL correspond à ce que vous attendez
+      - "5433:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
