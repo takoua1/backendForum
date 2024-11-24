@@ -13,6 +13,7 @@ services:
       APPLICATION_SECURITY_JWT_SECRET_KEY: ${APPLICATION_SECURITY_JWT_SECRET_KEY}
       SPRING_MAIL_USERNAME: ${SPRING_MAIL_USERNAME}
       SPRING_MAIL_PASSWORD: ${SPRING_MAIL_PASSWORD}
+      PORT: 8084
     depends_on:
       - db
     command: ["./wait-for-it.sh", "db:5432", "--", "java", "-jar", "/forumSocialX.jar"]
