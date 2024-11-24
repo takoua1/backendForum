@@ -16,7 +16,8 @@ services:
       PORT: 8084
     depends_on:
       - db
-    command: ["./wait-for-it.sh", "db:5432", "--", "java", "-jar", "/forumSocialX.jar"]
+    command: [ "./wait-for-it.sh", "db:5432", "-t", "120", "--", "java", "-jar", "/forumSocialX.jar" ]
+
 
   db:
     image: postgres:16

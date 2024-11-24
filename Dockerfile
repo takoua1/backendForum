@@ -26,6 +26,10 @@ COPY ./scripts/start.sh /start.sh
 
 # Donner les permissions d'exécution
 RUN chmod +x /scripts/wait-for-it.sh /start.sh
+
+
 EXPOSE 8084
+
+
 # Configurer l'entrypoint
 ENTRYPOINT ["/bin/bash", "/start.sh"]
