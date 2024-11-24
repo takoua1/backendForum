@@ -7,7 +7,7 @@ if [ ! -f "/forumSocialX.jar" ]; then
 fi
 
 # Attendre que la base de données soit prête
-/scripts/wait-for-it.sh db:5432 -t 30 -- echo "Database is up!"
+/scripts/wait-for-it.sh db:5432 -t 60 -- echo "Database is up!"
 
 # Démarrer l'application
 java -jar /forumSocialX.jar
