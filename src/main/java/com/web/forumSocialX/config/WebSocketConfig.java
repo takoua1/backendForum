@@ -35,11 +35,19 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer{
     }
 
     @Override
+
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/chat-socket") .withSockJS();
-        registry.addEndpoint("/ws-signale").withSockJS();
-        registry.addEndpoint("/ws-mail").withSockJS();
+        registry.addEndpoint("/chat-socket")
+                .setAllowedOrigins("http://localhost:4200") // Add allowed origins here
+                .withSockJS();
+        registry.addEndpoint("/ws-signale")
+                .setAllowedOrigins("http://localhost:4200") // Add allowed origins here
+                .withSockJS();
+        registry.addEndpoint("/ws-mail")
+                .setAllowedOrigins("http://localhost:4200") // Add allowed origins here
+                .withSockJS();
     }
+
 
 
 

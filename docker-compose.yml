@@ -11,7 +11,7 @@ services:
       APPLICATION_SECURITY_JWT_SECRET_KEY: ${APPLICATION_SECURITY_JWT_SECRET_KEY}
       SPRING_MAIL_USERNAME: ${SPRING_MAIL_USERNAME}
       SPRING_MAIL_PASSWORD: ${SPRING_MAIL_PASSWORD}
-    
+
     depends_on:
       - db
     command: [ "./wait-for-it.sh", "dpg-ct1onv9opnds73fmddb0-a.oregon-postgres.render.com:5432", "-t", "120", "--", "java", "-jar", "/forumSocialX.jar" ]
