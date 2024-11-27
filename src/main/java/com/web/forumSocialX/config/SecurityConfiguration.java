@@ -42,7 +42,7 @@ public class SecurityConfiguration   {
     {
         http.csrf(csrf ->csrf.disable())
 
-                .cors(cros-> cros.disable())
+                
 
                 .authorizeHttpRequests(auth-> auth.requestMatchers("/auth/**","/user/**","/poste/**","/comment/**","/interaction/**","/chat-socket/**","/chat/**","/topic/**","/app/**",
                                 "/groupe/**","/privie/**","/statistics/**","/ws-signale/**","/ws-mail/**","/mail/**","/follow/**","/blocks/**")
@@ -64,6 +64,21 @@ public class SecurityConfiguration   {
     public GrantedAuthorityDefaults grantedAuthorityDefaults() {
         // Configure Spring Security to accept roles without 'ROLE_' prefix
         return new GrantedAuthorityDefaults(""); // Remove 'ROLE_' prefix
+    }
+    @Bean
+    public CorsFilter corsFilter() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+
+        // Autoriser les requêtes provenant de Netlify
+        corsConfiguration.addAllowedOrigin("https://forumsocialx.netlify.app");
+        corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration); // Appliquer à toutes les requêtes
+
+        return new CorsFilter(source);
     }
 
 
