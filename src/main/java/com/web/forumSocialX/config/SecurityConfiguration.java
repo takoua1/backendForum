@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -18,6 +20,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -39,7 +42,7 @@ public class SecurityConfiguration   {
     {
         http.csrf(csrf ->csrf.disable())
 
-                .cors(cros-> cros.disable())
+              
 
                 .authorizeHttpRequests(auth-> auth.requestMatchers("/auth/**","/user/**","/poste/**","/comment/**","/interaction/**","/chat-socket/**","/chat/**","/topic/**","/app/**",
                                 "/groupe/**","/privie/**","/statistics/**","/ws-signale/**","/ws-mail/**","/mail/**","/follow/**","/blocks/**")
@@ -63,5 +66,19 @@ public class SecurityConfiguration   {
         return new GrantedAuthorityDefaults(""); // Remove 'ROLE_' prefix
     }
 
+    @Bean
+    public CorsFilter corsFilter() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
 
+        // Autoriser les requêtes venant de votre domaine frontend
+        corsConfiguration.addAllowedOrigin("https://forumsocialx.netlify.app"); // Remplacez par votre URL frontend
+        corsConfiguration.addAllowedMethod("*"); // Autoriser toutes les méthodes HTTP (GET, POST, etc.)
+        corsConfiguration.addAllowedHeader("*"); // Autoriser tous les en-têtes
+        corsConfiguration.setAllowCredentials(true); // Si vous envoyez des cookies ou des tokens
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration); // Appliquer à toutes les requêtes
+
+        return new CorsFilter(source);
+    }
 }
