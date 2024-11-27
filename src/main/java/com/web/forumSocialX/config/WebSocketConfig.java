@@ -38,16 +38,15 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer{
 
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/chat-socket")
-                .setAllowedOrigins("http://localhost:4200") // Add allowed origins here
+                .setAllowedOrigins("https://forumsocialx.netlify.app", "https://www.forumsocialx.netlify.app") // Ajoutez vos origines autorisées ici
                 .withSockJS();
         registry.addEndpoint("/ws-signale")
-                .setAllowedOrigins("http://localhost:4200") // Add allowed origins here
+                .setAllowedOrigins("https://forumsocialx.netlify.app", "https://www.forumsocialx.netlify.app")
                 .withSockJS();
         registry.addEndpoint("/ws-mail")
-                .setAllowedOrigins("http://localhost:4200") // Add allowed origins here
+                .setAllowedOrigins("https://forumsocialx.netlify.app", "https://www.forumsocialx.netlify.app")
                 .withSockJS();
     }
-
 
 
 
