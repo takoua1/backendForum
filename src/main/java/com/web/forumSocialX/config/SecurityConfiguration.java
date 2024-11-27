@@ -61,12 +61,14 @@ public class SecurityConfiguration   {
 
     // Configuration CORS centralisée
     @Bean
+    
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("https://forumsocialx.netlify.app"); // Origine autorisée
-        configuration.addAllowedMethod("*"); // Méthodes HTTP autorisées
-        configuration.addAllowedHeader("*"); // En-têtes autorisés
-        configuration.setAllowCredentials(true); // Autoriser les cookies/credentials
+        configuration.addAllowedOrigin("https://forumsocialx.netlify.app");
+        configuration.addAllowedOrigin("https://www.forumsocialx.netlify.app"); // Si nécessaire
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("*");
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
@@ -77,21 +79,7 @@ public class SecurityConfiguration   {
         // Configure Spring Security to accept roles without 'ROLE_' prefix
         return new GrantedAuthorityDefaults(""); // Remove 'ROLE_' prefix
     }
-    @Bean
-    public CorsFilter corsFilter() {
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
 
-        // Autoriser les requêtes provenant de Netlify
-        corsConfiguration.addAllowedOrigin("https://forumsocialx.netlify.app");
-        corsConfiguration.addAllowedMethod("*");
-        corsConfiguration.addAllowedHeader("*");
-        corsConfiguration.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", corsConfiguration); // Appliquer à toutes les requêtes
-
-        return new CorsFilter(source);
-    }
 
 
 }
