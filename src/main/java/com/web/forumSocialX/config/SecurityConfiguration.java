@@ -38,41 +38,27 @@ public class SecurityConfiguration   {
         return new HttpStatusReturningLogoutSuccessHandler();
     }
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Activer le CORS géré par Spring
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/user/**", "/poste/**", "/comment/**", "/interaction/**",
-                                "/chat-socket/**", "/chat/**", "/topic/**", "/app/**",
-                                "/groupe/**", "/privie/**", "/statistics/**", "/ws-signale/**",
-                                "/ws-mail/**", "/mail/**", "/follow/**", "/blocks/**")
-                        .permitAll() // Rendre publiques ces routes
-                        .requestMatchers("/signale/**").hasRole("ADMIN") // Exiger le rôle ADMIN pour cette route
-                        .anyRequest().authenticated()) // Toutes les autres routes nécessitent une authentification
-                .sessionManagement(session -> session.sessionCreationPolicy(STATELESS)) // Mode Stateless
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
+    {
+        http.csrf(csrf ->csrf.disable())
+
+                .cors(cros-> cros.disable())
+
+                .authorizeHttpRequests(auth-> auth.requestMatchers("/auth/**","/user/**","/poste/**","/comment/**","/interaction/**","/chat-socket/**","/chat/**","/topic/**","/app/**",
+                                "/groupe/**","/privie/**","/statistics/**","/ws-signale/**","/ws-mail/**","/mail/**","/follow/**","/blocks/**")
+                .permitAll()
+                        .requestMatchers("/signale/**").hasRole("ADMIN") // Exiger le rôle ADMIN pour certaines routes
+
+                .anyRequest()
+                .authenticated())
+                .sessionManagement(session-> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // Ajouter le filtre JWT
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout -> logout
                         .logoutUrl("/auth/logout")
-                        .logoutSuccessHandler(logoutSuccessHandler()));
-
+                        .logoutSuccessHandler(logoutSuccessHandler())
+                );
         return http.build();
-    }
-
-    // Configuration CORS centralisée
-    @Bean
-    
-    public UrlBasedCorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("https://forumsocialx.netlify.app");
-        configuration.addAllowedOrigin("https://www.forumsocialx.netlify.app"); // Si nécessaire
-        configuration.addAllowedMethod("*");
-        configuration.addAllowedHeader("*");
-        configuration.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
     }
     @Bean
     public GrantedAuthorityDefaults grantedAuthorityDefaults() {
