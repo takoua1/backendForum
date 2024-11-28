@@ -23,7 +23,7 @@ public class EmailService {
 
     public void sendVerificationEmail(String to, String name, String firstname, String token) {
         String subject = "Confirmez votre E-Mail - Inscription à l'application ForumSocialX";
-        String confirmationUrl = "https://backendforum-8dpz.onrender.com/auth/verify?token=" + token;
+        String confirmationUrl = "https://backendforum-1.onrender.com/auth/verify?token=" + token;
    String message = "<html>" +
                 "<body style='font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333; padding: 20px;'>" +
                 "<div style='max-width: 600px; margin: auto; background: #fff; border-radius: 5px; padding: 20px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);'>" +
@@ -85,6 +85,6 @@ public class EmailService {
 
 
     private String generateConfirmationLink(String token){
-        return "<a href=http://localhost:4200/auth/verify?token="+token+">Confirm Email</a>";
+        return "<a href=https://backendforum-1.onrender.com/auth/verify?token="+token+">Confirm Email</a>";
     }
 }
