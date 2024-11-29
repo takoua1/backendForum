@@ -78,13 +78,17 @@ public class SecurityConfiguration   {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of("https://forum-socialx.vercel.app")); // Frontend autorisé
+        config.setAllowedOrigins(List.of(
+                "https://forum-socialx.vercel.app", // Frontend autorisé
+                "http://localhost:4200"            // Ajouter localhost pour le développement local
+        ));
         config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
     }
+
 
 
 }

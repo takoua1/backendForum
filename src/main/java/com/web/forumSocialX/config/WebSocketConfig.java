@@ -38,18 +38,19 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer{
 
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/chat-socket")
-                .setAllowedOrigins("https://forum-socialx.vercel.app")
-                .setAllowedOriginPatterns("*") // Si vous voulez autoriser tous les sous-domaines
+                .setAllowedOrigins("https://forum-socialx.vercel.app", "http://localhost:4200")  // Ajouter localhost pour développement local
+                .setAllowedOriginPatterns("*")  // Si vous voulez autoriser tous les sous-domaines
                 .withSockJS();
         registry.addEndpoint("/ws-signale")
-                .setAllowedOrigins("https://forum-socialx.vercel.app")
-                .setAllowedOriginPatterns("*") // Si vous voulez autoriser tous les sous-domaines
+                .setAllowedOrigins("https://forum-socialx.vercel.app", "http://localhost:4200")  // Ajouter localhost
+                .setAllowedOriginPatterns("*")  // Si vous voulez autoriser tous les sous-domaines
                 .withSockJS();
         registry.addEndpoint("/ws-mail")
-                .setAllowedOrigins("https://forum-socialx.vercel.app")
-                .setAllowedOriginPatterns("*") // Si vous voulez autoriser tous les sous-domaines
+                .setAllowedOrigins("https://forum-socialx.vercel.app", "http://localhost:4200")  // Ajouter localhost
+                .setAllowedOriginPatterns("*")  // Si vous voulez autoriser tous les sous-domaines
                 .withSockJS();
     }
+
 
 
 
