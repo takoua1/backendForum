@@ -78,7 +78,7 @@ public class SecurityConfiguration   {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of("https://forumsocialx.netlify.app")); // Frontend autorisé
+        config.setAllowedOrigins(List.of("https://forum-socialx.vercel.app")); // Frontend autorisé
         config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
