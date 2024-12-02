@@ -75,19 +75,47 @@ public class SecurityConfiguration   {
      * Configuration source pour CORS.
      */
     @Bean
+    @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
+
+        // Autorise toutes les origines (ajoutez votre frontend spécifique si nécessaire)
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of(
-                "https://forum-socialx.vercel.app", // Frontend autorisé
-                "http://localhost:4200"            // Ajouter localhost pour le développement local
-        ));
-        config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
-        config.addAllowedMethod("*");
+        config.setAllowedOrigins(Arrays.asList("http://localhost:4200", "https://forum-socialx.vercel.app"));  // Définir ici vos origines spécifiques si nécessaire
+
+        // Autorise tous les en-têtes
+        config.setAllowedHeaders(Arrays.asList("*"));
+
+        // Autorise toutes les méthodes HTTP
+        config.setAllowedMethods(Arrays.asList("*"));
+
+        // Applique la configuration CORS pour toutes les routes
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
-        return source;
+
+        return new CorsFilter(source);  // Retourne un CorsFilter avec la configuration définie
     }
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+
+        // Autorise toutes les origines (ajoutez votre frontend spécifique si nécessaire)
+        config.setAllowCredentials(true);
+        config.setAllowedOrigins(Arrays.asList("http://localhost:4200", "https://forum-socialx.vercel.app"));  // Définir ici vos origines spécifiques si nécessaire
+
+        // Autorise tous les en-têtes
+        config.setAllowedHeaders(Arrays.asList("*"));
+
+        // Autorise toutes les méthodes HTTP
+        config.setAllowedMethods(Arrays.asList("*"));
+
+        // Applique la configuration CORS pour toutes les routes
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+
+        return new CorsFilter(source);  // Retourne un CorsFilter avec la configuration définie
+    }
+
 
 
 
