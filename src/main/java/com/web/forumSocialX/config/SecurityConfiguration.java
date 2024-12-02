@@ -83,7 +83,7 @@ public class SecurityConfiguration   {
                 "http://localhost:4200"            // Ajouter localhost pour le développement local
         ));
         config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.addAllowedMethod("*");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
