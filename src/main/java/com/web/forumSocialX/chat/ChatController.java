@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.web.forumSocialX.user.User;
 import com.web.forumSocialX.user.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -21,7 +22,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+@RestController
+@Slf4j
 
 @RequestMapping(path = "/chat")
 
