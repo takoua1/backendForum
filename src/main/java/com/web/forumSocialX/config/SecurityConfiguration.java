@@ -26,6 +26,7 @@ import org.springframework.security.web.authentication.logout.HttpStatusReturnin
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.web.filter.CorsFilter;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -75,7 +76,7 @@ public class SecurityConfiguration   {
      * Configuration source pour CORS.
      */
     @Bean
-    @Bean
+
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
@@ -93,7 +94,7 @@ public class SecurityConfiguration   {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
 
-        return new CorsFilter(source);  // Retourne un CorsFilter avec la configuration définie
+        return source;  // Retourne un CorsFilter avec la configuration définie
     }
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
