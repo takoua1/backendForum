@@ -76,7 +76,6 @@ public class SecurityConfiguration   {
      * Configuration source pour CORS.
      */
     @Bean
-
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
@@ -94,9 +93,9 @@ public class SecurityConfiguration   {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
 
-        return source;  // Retourne un CorsFilter avec la configuration définie
+        return source;
+         // Retourne un CorsFilter avec la configuration définie
     }
-   
 
 
 

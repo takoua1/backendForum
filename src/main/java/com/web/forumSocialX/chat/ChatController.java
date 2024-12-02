@@ -292,7 +292,7 @@ public class ChatController {
     public List<Chat> getAllChats() {
         return chatService.findAllChats();
     }
-    @GetMapping("/chat/member/{userId}")
+    @GetMapping("/member/{userId}")
     public ResponseEntity<List<Chat>> getChatsForMember(@PathVariable Long userId) {
         User member = new User(); // Supposons que vous avez une manière de récupérer l'objet User ici
         member.setId(userId); // Mettez à jour selon votre implémentation
@@ -339,7 +339,7 @@ public class ChatController {
             return fileUrl;
         }
     }
-    @PatchMapping("/chat/chats/mark-all-read/{chatId}")
+    @PatchMapping("/chats/mark-all-read/{chatId}")
     public ResponseEntity<Void> markAllChatMessagesRead(@PathVariable Long chatId) {
         // Implémentez la logique pour marquer tous les messages du chat comme lus
         chatService.markAllChatMessagesRead(chatId);
