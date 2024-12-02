@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-@RestController
+@RequestMapping(path = "/chat")
 
 @RequiredArgsConstructor
 public class ChatController {
@@ -238,14 +238,14 @@ public class ChatController {
         Set<String> activeUsersInChat = activeUsers.getOrDefault(chatId, ConcurrentHashMap.newKeySet());
         messagingTemplate.convertAndSend("/topic/chat/" + chatId + "/activeUsers", activeUsersInChat);
     }*/
-   @MessageMapping("/chat/{chatId}/user/{username}/join")
+   @MessageMapping("/{chatId}/user/{username}/join")
    public void userJoinedChat(@DestinationVariable Long chatId, @DestinationVariable String username) {
        activeUsers.computeIfAbsent(chatId, k -> ConcurrentHashMap.newKeySet()).add(username);
        userChatMap.put(username, chatId);
        messagingTemplate.convertAndSend("/topic/chat/" + chatId + "/activeUsers", activeUsers.get(chatId));
    }
 
-    @MessageMapping("/chat/user/{username}/leave")
+    @MessageMapping("/user/{username}/leave")
     public void userLeftChat(@DestinationVariable String username) {
         Long chatId = userChatMap.remove(username);
         if (chatId != null) {
@@ -261,7 +261,7 @@ public class ChatController {
         }
     }
 
-    @MessageMapping("/chat/{chatId}/user/{username}/active")
+    @MessageMapping("/{chatId}/user/{username}/active")
     @SendToUser("/queue/active")
     public Set<String> isUserActiveInChat(@DestinationVariable Long chatId) {
         return activeUsers.getOrDefault(chatId, Collections.emptySet());
@@ -288,7 +288,7 @@ public class ChatController {
 */
 
 
-    @GetMapping("/chat/chats")
+    @GetMapping("/chats")
     public List<Chat> getAllChats() {
         return chatService.findAllChats();
     }
@@ -299,24 +299,24 @@ public class ChatController {
         List<Chat> chats = chatService.findChatsByMember(member);
         return ResponseEntity.ok(chats);
     }
-    @GetMapping("/chat/members/{chatId}")
+    @GetMapping("/members/{chatId}")
     public ResponseEntity<List<User>> getChatMembers(@PathVariable Long chatId) {
         List<User> members = chatService.findMembresByChatId(chatId);
         return ResponseEntity.ok(members);
     }
-    @GetMapping("/chat/messages/{chatId}")
+    @GetMapping("/messages/{chatId}")
     public ResponseEntity<List<Message>> getChatMessages(@PathVariable Long chatId) {
         List<Message> messages = chatService.findMessagesByChat(chatId);
         return ResponseEntity.ok(messages);
     }
 
-    @GetMapping("/chat/common-chats/{memberId1}/{memberId2}")
+    @GetMapping("/common-chats/{memberId1}/{memberId2}")
     public List<Chat> getCommonChats(@PathVariable  Long memberId1, @PathVariable  Long memberId2) {
         User member1 = userService.findById(memberId1).orElseThrow(() -> new RuntimeException("User not found"));
         User member2 = userService.findById(memberId2).orElseThrow(() -> new RuntimeException("User not found"));
         return chatService.getCommonChats(member1, member2);
     }
-    @PostMapping("/chat/upload")
+    @PostMapping("/upload")
     public ResponseEntity<?> handleFileUpload(@RequestParam("file") MultipartFile file) {
         try {
             List<String> folderNames = Arrays.asList("ImageChat"); // Update with actual username logic
@@ -346,24 +346,24 @@ public class ChatController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/chat/unread-count/{chatId}/{username}")
+    @GetMapping("/unread-count/{chatId}/{username}")
     public Long getUnreadMessageCount(@PathVariable Long chatId, @PathVariable String username) {
 
         return chatService.countUnreadMessagesByChatAndUser(chatId, username);
     }
 
-    @GetMapping("/chat/unread-total/{username}")
+    @GetMapping("/unread-total/{username}")
       public Long  getTotalUnreadMessageForUser(@PathVariable String username)
     {
         return chatService.countUnreadMessagesForUser(username);
     }
-    @PatchMapping("/chat/messages/mark-read/{chatId}/{username}")
+    @PatchMapping("/messages/mark-read/{chatId}/{username}")
     public ResponseEntity<Void> markMessagesAsRead(@PathVariable Long chatId, @PathVariable String username) {
         chatService.markMessagesAsRead(chatId, username);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/chat/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteChat(@PathVariable Long id) {
         chatService.deleteChat(id);
         messagingTemplate.convertAndSend("/topic/chat-deleted", id);

@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.*;
 
@@ -18,6 +19,7 @@ import java.util.*;
 @Data
 @Builder
 @AllArgsConstructor
+
 public class Chat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
