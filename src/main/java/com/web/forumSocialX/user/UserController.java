@@ -27,7 +27,7 @@ public class UserController  {
 
 
     private final  UserService  userService;
- 
+
     private final SimpMessagingTemplate messagingTemplate;
     @GetMapping("/findByUsername/{username}")
     public ResponseEntity<User> findByUsername(@PathVariable(value = "username") String username) {

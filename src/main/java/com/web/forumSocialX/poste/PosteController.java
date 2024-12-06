@@ -2,6 +2,7 @@ package com.web.forumSocialX.poste;
 
 
 import com.web.forumSocialX.category.Category;
+import com.web.forumSocialX.firebase.FirebaseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ import java.util.*;
 public class PosteController {
 
     private final PosteService posteService;
-    private final FirebaseStorageService firebaseStorageService;
+    private final FirebaseService firebaseStorageService;
 
     @PostMapping("/add")
 
