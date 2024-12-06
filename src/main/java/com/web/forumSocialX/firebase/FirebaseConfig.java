@@ -20,6 +20,7 @@ public class FirebaseConfig {
 
     @Bean
     public FirebaseApp firebaseApp() throws IOException {
+        System.out.println("Loading Firebase configuration from path: " + firebaseConfigPath);
         InputStream serviceAccount = new ClassPathResource(firebaseConfigPath).getInputStream();
 
         FirebaseOptions options = new FirebaseOptions.Builder()
