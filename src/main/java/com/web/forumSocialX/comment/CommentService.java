@@ -1,7 +1,7 @@
 package com.web.forumSocialX.comment;
 
 
-import com.web.forumSocialX.firebase.FirebaseStorageService;
+import com.web.forumSocialX.firebase.FirebaseService;
 import com.web.forumSocialX.interaction.Interaction;
 import com.web.forumSocialX.interaction.InteractionRepository;
 import com.web.forumSocialX.notification.Notification;
@@ -29,7 +29,7 @@ public class CommentService {
     public final CommentRepository commentRepository;
     public final PosteRepository posteRepository;
     public final UserRepository userRepository;
-    public final FirebaseStorageService firebaseStorageService;
+    public final FirebaseService firebaseStorageService;
     private final NotificationRepository notifRepository;
     private  final InteractionRepository interRepository;
 
@@ -55,7 +55,7 @@ public class CommentService {
 
             if(!file.isEmpty() && file !=null) {
                 List<String> folderNames = Arrays.asList("ImageComment",comment.getUser().getUsername());
-                String  imageUrl= firebaseStorageService.upload(file,folderNames);
+                String  imageUrl= firebaseStorageService.uploadFile(file,folderNames);
                 comment.setImage(imageUrl);
             }
             else {
@@ -96,7 +96,7 @@ public class CommentService {
 
             if(!file.isEmpty() && file !=null) {
                 List<String> folderNames = Arrays.asList("ImageCommentChild", commChilds.getUser().getUsername());
-                String  imageUrl= firebaseStorageService.upload(file,folderNames);
+                String  imageUrl= firebaseStorageService.uploadFile(file,folderNames);
                 commChilds.setImage(imageUrl);
             }
             else {

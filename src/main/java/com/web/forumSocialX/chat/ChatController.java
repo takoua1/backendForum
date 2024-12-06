@@ -1,7 +1,7 @@
 package com.web.forumSocialX.chat;
 
 
-import com.web.forumSocialX.firebase.FirebaseStorageService;
+import com.web.forumSocialX.firebase.FirebaseService;
 import com.web.forumSocialX.groupe.Groupe;
 import com.web.forumSocialX.message.*;
 
@@ -34,7 +34,7 @@ public class ChatController {
     private final ChatService chatService;
     private final UserService userService;
     private final MessageService messageService;
-    private final FirebaseStorageService firebaseStorageService;
+    private final FirebaseService firebaseStorageService;
     private final Map<Long, Set<String>> activeUsers = new ConcurrentHashMap<>();
     private Map<String, Long> userChatMap = new ConcurrentHashMap<>();
 
@@ -322,7 +322,7 @@ public class ChatController {
     public ResponseEntity<?> handleFileUpload(@RequestParam("file") MultipartFile file) {
         try {
             List<String> folderNames = Arrays.asList("ImageChat"); // Update with actual username logic
-            String fileUrl = firebaseStorageService.upload(file, folderNames);
+            String fileUrl = firebaseStorageService.uploadFile (file, folderNames);
 
             return ResponseEntity.ok(new FileUploadResponse(fileUrl));
         } catch (Exception e) {

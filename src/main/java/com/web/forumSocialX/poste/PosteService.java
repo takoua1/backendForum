@@ -3,7 +3,7 @@ package com.web.forumSocialX.poste;
 
 import com.web.forumSocialX.comment.Comment;
 import com.web.forumSocialX.comment.CommentRepository;
-import com.web.forumSocialX.firebase.FirebaseStorageService;
+import com.web.forumSocialX.firebase.FirebaseService;
 import com.web.forumSocialX.interaction.Interaction;
 import com.web.forumSocialX.interaction.InteractionRepository;
 import com.web.forumSocialX.notification.Notification;
@@ -38,7 +38,7 @@ public class PosteService {
     private final PosteRepository posteRepository;
     private final UserRepository userRepository;
     private final NotificationRepository notifRepository;
-    private final FirebaseStorageService firebaseStorageService;
+    private final FirebaseService firebaseStorageService;
     private final InteractionRepository interRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -75,7 +75,7 @@ public class PosteService {
                 .orElseThrow(() -> new RuntimeException("poste not found for posteId: " + id));
 
         List<String> folderNames = Arrays.asList("ImagePoste",poste.getUser().getUsername());
-        String  imageUrl= firebaseStorageService.upload(multipartFile,folderNames);
+        String  imageUrl= firebaseStorageService.uploadFile(multipartFile,folderNames);
         if(imageUrl != null) {
             poste.setImage(imageUrl);
         }
@@ -99,7 +99,7 @@ public class PosteService {
             if (multipartFile != null && !multipartFile.isEmpty())
             {
                 List<String> folderNames = Arrays.asList("ImagePoste",p.getUser().getUsername());
-                String  imageUrl= firebaseStorageService.upload(multipartFile,folderNames);
+                String  imageUrl= firebaseStorageService.uploadFile(multipartFile,folderNames);
 
                 p.setImage(imageUrl);
             }else if(deleteImage)
@@ -140,7 +140,7 @@ public class PosteService {
 
             if(!file.isEmpty() && file !=null) {
                 List<String> folderNames = Arrays.asList("ImagePoste",poste.getUser().getUsername());
-                String  imageUrl= firebaseStorageService.upload(file,folderNames);
+                String  imageUrl= firebaseStorageService.uploadFile(file,folderNames);
                 poste.setImage(imageUrl);
             }
             else {

@@ -1,7 +1,6 @@
 package com.web.forumSocialX.user;
 
 import com.web.forumSocialX.firebase.FirebaseService;
-import com.web.forumSocialX.firebase.FirebaseStorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;

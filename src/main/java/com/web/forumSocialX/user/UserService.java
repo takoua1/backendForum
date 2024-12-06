@@ -2,7 +2,7 @@ package com.web.forumSocialX.user;
 
 import com.web.forumSocialX.chat.Chat;
 import com.web.forumSocialX.chat.ChatRepository;
-import com.web.forumSocialX.firebase.FirebaseStorageService;
+import com.web.forumSocialX.firebase.FirebaseService;
 import com.web.forumSocialX.groupe.Groupe;
 import com.web.forumSocialX.groupe.GroupeRepository;
 import com.web.forumSocialX.message.Message;
@@ -39,7 +39,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final FirebaseStorageService firebaseStorageService;
+    private final FirebaseService firebaseStorageService;
     private final MessageRepository messageRepository;
     private final ChatRepository chatRepository;
     private final GroupeRepository groupeRepository;
@@ -114,7 +114,7 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found for userId: " + id));
 
         List<String> folderNames = Arrays.asList("ImageProfile", user.getUsername());
-        String imageUrl = firebaseStorageService.upload(multipartFile, folderNames);
+        String imageUrl = firebaseStorageService.uploadFile(multipartFile, folderNames);
         if (imageUrl != null) {
             user.setImage(imageUrl);
         }

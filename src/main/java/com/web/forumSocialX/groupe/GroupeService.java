@@ -3,7 +3,7 @@ package com.web.forumSocialX.groupe;
 import com.web.forumSocialX.chat.Chat;
 import com.web.forumSocialX.chat.ChatRepository;
 import com.web.forumSocialX.chat.TypeChat;
-import com.web.forumSocialX.firebase.FirebaseStorageService;
+import com.web.forumSocialX.firebase.FirebaseService;
 import com.web.forumSocialX.message.Message;
 import com.web.forumSocialX.message.MessageRepository;
 import com.web.forumSocialX.user.User;
@@ -28,7 +28,7 @@ public class GroupeService {
 
     private final GroupeRepository groupeRepository;
     private final UserRepository userRepository;
-    private final FirebaseStorageService firebaseStorageService;
+    private final FirebaseService firebaseStorageService;
     private final ChatRepository chatRepository;
     private final MessageRepository messageRepository;
     public Groupe saveGroupe(Groupe groupe) {
@@ -73,7 +73,7 @@ public class GroupeService {
 
             if (file != null && !file.isEmpty()) {
                 List<String> folderNames = Arrays.asList("ImageGroupe", user.getUsername());
-                String imageUrl = firebaseStorageService.upload(file, folderNames);
+                String imageUrl = firebaseStorageService.uploadFile(file, folderNames);
                 groupe.setGroupImage(imageUrl);
             } else {
                 groupe.setGroupImage(""); // No image URL
@@ -334,7 +334,7 @@ public class GroupeService {
         // Gestion de l'image
         if (file != null && !file.isEmpty()) {
             List<String> folderNames = Arrays.asList("ImageGroupe", groupe.getUserCreature().getUsername());
-            String imageUrl = firebaseStorageService.upload(file, folderNames);
+            String imageUrl = firebaseStorageService.uploadFile(file, folderNames);
             groupe.setGroupImage(imageUrl);
         }
 
