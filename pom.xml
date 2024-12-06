@@ -65,6 +65,20 @@
 			<version>2.36.0</version>
 		</dependency>
 
+			<!-- Spring Boot Starter Cache pour la mise en cache -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-cache</artifactId>
+			</dependency>
+
+			<!-- Spring Boot Starter Actuator pour la surveillance des métriques et de la santé de l'application -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-actuator</artifactId>
+			</dependency>
+
+
+
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-api</artifactId>
