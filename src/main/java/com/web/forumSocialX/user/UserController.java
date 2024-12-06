@@ -24,10 +24,10 @@ import java.util.Map;
 
 public class UserController  {
 
-    private final FirebaseStorageService firebaseStorageService;
+
 
     private final  UserService  userService;
-    private final FirebaseService firebaseService;
+ 
     private final SimpMessagingTemplate messagingTemplate;
     @GetMapping("/findByUsername/{username}")
     public ResponseEntity<User> findByUsername(@PathVariable(value = "username") String username) {
