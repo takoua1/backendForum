@@ -79,9 +79,11 @@ public class SecurityConfiguration   {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.setAllowedOrigins(List.of(
-                "https://forum-socialx.vercel.app", // Frontend autorisé
-                "http://localhost:4200"            // Ajouter localhost pour le développement local
+                "https://forum-socialx.vercel.app",
+                "http://localhost:4200",
+                "capacitor://localhost"
         ));
+
         config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
         config.addAllowedMethod("*");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
