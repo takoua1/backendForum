@@ -81,7 +81,8 @@ public class SecurityConfiguration   {
         config.setAllowedOrigins(List.of(
                 "https://forum-socialx.vercel.app",
                 "http://localhost:4200",
-                "capacitor://localhost"
+                "capacitor://localhost",
+                "http://localhost"
         ));
 
         config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
