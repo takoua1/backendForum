@@ -82,7 +82,7 @@ public class SecurityConfiguration   {
                 "https://forum-socialx.vercel.app",
                 "http://localhost:4200",
                 "capacitor://localhost",
-                "http://localhost","http://192.168.1.14","http://192.168.1.17"
+                "http://localhost","http://192.168.1.14","http://192.168.1.17","http://10.0.2.2:8084","http://192.168.x.x:8084"
         ));
 
         config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));

@@ -38,15 +38,15 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer{
 
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/chat-socket")
-                .setAllowedOrigins("https://forum-socialx.vercel.app", "http://localhost:4200", "capacitor://localhost", "http://localhost","http://192.168.1.14","http://192.168.1.17")  // Ajouter localhost pour développement local
+                .setAllowedOrigins("https://forum-socialx.vercel.app", "http://localhost:4200", "capacitor://localhost", "http://localhost","http://192.168.1.14","http://192.168.1.17","http://10.0.2.2:8084", "http://192.168.x.x:8084")  // Ajouter localhost pour développement local
                 .setAllowedOriginPatterns("*")  // Si vous voulez autoriser tous les sous-domaines
                 .withSockJS();
         registry.addEndpoint("/ws-signale")
-                .setAllowedOrigins("https://forum-socialx.vercel.app", "http://localhost:4200", "capacitor://localhost", "http://localhost","http://192.168.1.14","http://192.168.1.17")// Ajouter localhost
+                .setAllowedOrigins("https://forum-socialx.vercel.app", "http://localhost:4200", "capacitor://localhost", "http://localhost","http://192.168.1.14","http://192.168.1.17","http://10.0.2.2:8084", "http://192.168.x.x:8084")// Ajouter localhost
                 .setAllowedOriginPatterns("*")  // Si vous voulez autoriser tous les sous-domaines
                 .withSockJS();
         registry.addEndpoint("/ws-mail")
-                .setAllowedOrigins("https://forum-socialx.vercel.app", "http://localhost:4200", "capacitor://localhost", "http://localhost","http://192.168.1.14","http://192.168.1.17")// Ajouter localhost
+                .setAllowedOrigins("https://forum-socialx.vercel.app", "http://localhost:4200", "capacitor://localhost", "http://localhost","http://192.168.1.14","http://192.168.1.17","http://10.0.2.2:8084", "http://192.168.x.x:8084")// Ajouter localhost
                 .setAllowedOriginPatterns("*")  // Si vous voulez autoriser tous les sous-domaines
                 .withSockJS();
     }
