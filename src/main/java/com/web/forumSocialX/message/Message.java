@@ -2,6 +2,7 @@ package com.web.forumSocialX.message;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.web.forumSocialX.chat.Chat;
 import com.web.forumSocialX.user.User;
 import jakarta.persistence.*;
@@ -20,6 +21,7 @@ import java.util.List;
 
 @Builder
 @AllArgsConstructor
+@JsonIgnoreProperties({"chat"})
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

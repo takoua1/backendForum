@@ -12,7 +12,18 @@ public enum Category {
  Sport,
     Politique,
     Musique,
-    Education
+    Education,
+    Technologie,
+
+    Animaux,          // Nouvelle catégorie pour les animaux
+    Voyage,           // Nouvelle catégorie pour les voyages
+    Culture,          // Nouvelle catégorie pour la culture
+    Science,          // Nouvelle catégorie pour les sciences
+    Santé,            // Nouvelle catégorie pour la santé
+    Cuisine,          // Nouvelle catégorie pour la cuisine
+    Histoire,         // Nouvelle catégorie pour l'histoire
+    Art,              // Nouvelle catégorie pour les arts
+    Environnement     // Nouvelle catégorie pour l'environnement
 
 
 }

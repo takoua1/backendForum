@@ -53,7 +53,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .email(request.getEmail())
                 .pays("")
-                .tel(request.getTel())
+
                 .status(request.getStatus())
                 .role(request.getRole())
                 .dateAuthenticated(new Date())

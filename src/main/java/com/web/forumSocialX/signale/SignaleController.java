@@ -65,4 +65,11 @@ public class SignaleController {
         Signale updatedSignale = signaleService.disableSignale(id);
         return ResponseEntity.ok(updatedSignale);
     }
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSignale(@PathVariable Long id) {
+        signaleService.deleteSignale(id);
+
+        return ResponseEntity.noContent().build();
+    }
 }

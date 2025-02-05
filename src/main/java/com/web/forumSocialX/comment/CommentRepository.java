@@ -27,4 +27,5 @@ public interface CommentRepository  extends JpaRepository<Comment, Long> {
     @Query("SELECT c FROM Comment c WHERE c.parentComment.id = :parentId AND c.enabled = true")
     List<Comment> findEnabledChildCommentsByParentId(@Param("parentId") Long parentId);
     Optional<Comment> findById(Long id);
+
 }

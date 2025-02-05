@@ -4,6 +4,7 @@ package com.web.forumSocialX.statistics;
 import com.web.forumSocialX.category.Category;
 import com.web.forumSocialX.comment.Comment;
 import com.web.forumSocialX.comment.CommentRepository;
+import com.web.forumSocialX.comment.CommentService;
 import com.web.forumSocialX.groupe.Groupe;
 import com.web.forumSocialX.groupe.GroupeRepository;
 import com.web.forumSocialX.poste.Poste;
@@ -34,7 +35,7 @@ public class StatisticsService {
     private static final SimpleDateFormat HOUR_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.FRENCH);
 
     private static final List<String> MONTH_NAMES = Arrays.asList(
-            "Jan", "Fév", "Mar", "Avr", "Mai", "Jui", "Jui", "Aoû", "Sep", "Oct", "Nov", "Déc"
+            "Jan", "Fév", "Mar", "Avr", "Mai", "Jun", "Jui", "Aoû", "Sep", "Oct", "Nov", "Déc"
     );
 
     private static final List<String> DAY_NAMES = Arrays.asList(
@@ -44,6 +45,7 @@ public class StatisticsService {
 
     private final PosteRepository posteRepository;
  private final CommentRepository commentRepository;
+ private final CommentService commentService;
     private final GroupeRepository groupeRepository;
     private final  UserRepository userRepository;
     /* public Map<Category, Long> getPostesStatisticsByPeriod(Date startDate) {
@@ -131,21 +133,25 @@ public class StatisticsService {
 
         while (cal.getTime().before(endDate) || cal.getTime().equals(endDate)) {
             Date periodStart = cal.getTime();
+            System.out.println("Period Start: " + periodStart);  // Log pour la période de début
+
+            // Formater le nom du mois et l'année pour la clé **avant d'avancer d'un mois**
+            String key = MONTH_NAMES.get(cal.get(Calendar.MONTH)) + " " + cal.get(Calendar.YEAR);
+            System.out.println("Formatted Month Key: " + key);  // Log pour le mois formaté
 
             // Avancer d'un mois
             cal.add(Calendar.MONTH, 1);
 
             // Ajuster la fin de la période
             Date periodEnd = cal.getTime();
+            System.out.println("Period End (avant ajustement): " + periodEnd);  // Log pour la période de fin avant ajustement
 
             // Si periodEnd dépasse endDate, on limite la période à endDate
             if (periodEnd.after(endDate)) {
                 periodEnd = endDate;
+                System.out.println("Period End ajusté: " + periodEnd);  // Log si la période de fin est ajustée
             }
 
-            // Formater le nom du mois et l'année pour la clé
-            String key = MONTH_NAMES.get(cal.get(Calendar.MONTH) == 0 ? 11 : cal.get(Calendar.MONTH) - 1)
-                    + " " + cal.get(Calendar.YEAR);
 
             // Ajouter les statistiques pour le mois courant
             monthlyStats.put(key, getStatisticsByPeriod(periodStart, periodEnd, category, PeriodType.WEEK));
@@ -460,70 +466,84 @@ public class StatisticsService {
 /////////////////////////////////////////comment //////////////////////////////////////////////////////
 
     public Map<String, Object> getCommentsStatisticsByPeriod(Date startDate, Date endDate) {
+        // Récupérer tous les commentaires dans la période donnée
         List<Comment> comments = commentRepository.findByDateCreateBetweenAndEnabledTrue(startDate, endDate);
 
-        // Calculer le nombre total de commentaires dans la période
+        // Calculer le nombre total de commentaires
         long totalComments = comments.size();
 
-        // Initialiser les statistiques avec des valeurs de 0
+        // Initialiser les statistiques avec toutes les catégories à 0
         Map<Category, Long> countStatistics = Arrays.stream(Category.values())
                 .collect(Collectors.toMap(Function.identity(), c -> 0L));
 
-        // Mettre à jour les statistiques en fonction des commentaires
+        // Parcourir tous les commentaires pour mettre à jour les statistiques
         for (Comment comment : comments) {
-            if (comment != null && comment.getPoste() != null) {
-                Poste poste = comment.getPoste();
-                if (poste != null) {
-                    Category category = poste.getCategory();
-                    countStatistics.put(category, countStatistics.get(category) + 1);
-                }
+            // Utiliser getParentPoste() pour trouver le poste associé
+            Poste poste = commentService .getParentPoste(comment);
+
+            // Si le poste et sa catégorie existent, mettre à jour les statistiques
+            if (poste != null && poste.getCategory() != null) {
+                Category category = poste.getCategory();
+                countStatistics.put(category, countStatistics.get(category) + 1);
             }
         }
 
-        // Calculer les pourcentages
+        // Calculer les pourcentages pour chaque catégorie
         Map<Category, Double> percentageStatistics = countStatistics.entrySet().stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
                         entry -> (totalComments > 0) ? (entry.getValue() * 100.0 / totalComments) : 0.0
                 ));
 
-        // Préparer le résultat final avec les pourcentages et le total des commentaires
-        Map<String, Object> result = new HashMap<>();
-        result.put("percentages", percentageStatistics);
-        result.put("total", totalComments);
+        // Préparer la réponse
+        Map<String, Object> response = new HashMap<>();
+        response.put("percentages", percentageStatistics);
+        response.put("totalComments", totalComments);
 
-        System.out.println("Total Comments: " + totalComments);
-        System.out.println("Percentage Statistics: " + percentageStatistics);
-
-        return result;
+        return response;
     }
 
+
+
+
+
+
+
+
     public Map<String, Map<Category, Long>> getCommentsStatistics(String category, String period, Date selectedDate) {
+        // Nettoyage de la période
+        period = period.trim().replace("'", "");
+
+        // Affichage pour vérification
+        System.out.println("Period cleaned: '" + period + "'");
+
         Date startDate;
         Date endDate;
 
-        switch (period) {
+        switch (period.toLowerCase()) {
             case "year":
                 startDate = getStartDateForYear(selectedDate);
-                endDate =DateUtils.addMonths(startDate, 11); // Date actuelle
+                endDate = DateUtils.addMonths(startDate, 11);
                 return getMonthlyCommentStatistics(startDate, endDate, category);
 
             case "month":
                 startDate = getStartDateForMonth(selectedDate);
-                endDate = DateUtils.addMonths(startDate, 1); // Fin du mois
+                endDate = DateUtils.addMonths(startDate, 1);
                 return getWeeklyCommentStatistics(startDate, endDate, category);
 
             case "week":
                 startDate = getStartDateForWeek(selectedDate);
-                endDate = DateUtils.addDays(startDate, 7); // Fin de la semaine
+                endDate = DateUtils.addDays(startDate, 7);
                 return getDailyCommentStatistics(startDate, endDate, category);
 
             case "day":
                 startDate = getStartDateForDay(selectedDate);
-                endDate = selectedDate; // Jusqu'à la date actuelle
+                endDate = selectedDate;
                 return getHourlyCommentStatistics(startDate, endDate, category);
 
             default:
+                // Log de l'erreur
+                System.out.println("Invalid period: '" + period + "'");
                 throw new IllegalArgumentException("Période non reconnue: " + period);
         }
     }
@@ -535,28 +555,39 @@ public class StatisticsService {
 
         while (cal.getTime().before(endDate) || cal.getTime().equals(endDate)) {
             Date periodStart = cal.getTime();
+            System.out.println("Period Start: " + periodStart);  // Log pour la période de début
+
+            // Formater le nom du mois et l'année pour la clé **avant d'avancer d'un mois**
+            String key = MONTH_NAMES.get(cal.get(Calendar.MONTH)) + " " + cal.get(Calendar.YEAR);
+            System.out.println("Formatted Month Key: " + key);  // Log pour le mois formaté
 
             // Avancer d'un mois
             cal.add(Calendar.MONTH, 1);
 
             // Ajuster la fin de la période
             Date periodEnd = cal.getTime();
+            System.out.println("Period End (avant ajustement): " + periodEnd);  // Log pour la période de fin avant ajustement
 
             // Si periodEnd dépasse endDate, on limite la période à endDate
             if (periodEnd.after(endDate)) {
                 periodEnd = endDate;
+                System.out.println("Period End ajusté: " + periodEnd);  // Log si la période de fin est ajustée
             }
-
-            // Formater le nom du mois et l'année pour la clé
-            String key = MONTH_NAMES.get(cal.get(Calendar.MONTH) == 0 ? 11 : cal.get(Calendar.MONTH) - 1)
-                    + " " + cal.get(Calendar.YEAR);
 
             // Ajouter les statistiques pour le mois courant
             monthlyStats.put(key, getStatisticsCommentByPeriod(periodStart, periodEnd, category, PeriodType.WEEK));
+            System.out.println("Statistiques ajoutées pour: " + key);  // Log pour confirmer l'ajout des statistiques
         }
 
         return monthlyStats;
     }
+
+
+
+
+
+
+
 
 
     private Map<String, Map<Category, Long>> getWeeklyCommentStatistics(Date startDate, Date endDate, String category) {
@@ -693,48 +724,48 @@ public class StatisticsService {
     private Map<Category, Long> getStatisticsCommentByPeriod(Date startDate, Date endDate, String category, PeriodType periodType) {
         Map<Category, Long> countStatistics = new HashMap<>();
 
+        // Récupérer tous les commentaires activés dans la période spécifiée
+        List<Comment> comments = commentRepository.findByDateCreateBetweenAndEnabledTrue(startDate, endDate);
+        System.out.println("Number of comments found: " + comments.size());
+
         if ("All".equalsIgnoreCase(category)) {
-            // Récupérer tous les commentaires dans la période spécifiée
-            List<Comment> comments = commentRepository.findByDateCreateBetweenAndEnabledTrue(startDate, endDate);
-
-            // Initialiser les statistiques avec des valeurs de 0 pour chaque catégorie
-            Map<Category, Long> initialStatistics = Arrays.stream(Category.values())
-                    .collect(Collectors.toMap(Function.identity(), c -> 0L));
-
-            // Mettre à jour les statistiques en fonction des commentaires
-            for (Comment comment : comments) {
-                if (comment != null && comment.getPoste() != null) {
-                    Category commentCategory = comment.getPoste().getCategory();
-                    initialStatistics.put(commentCategory, initialStatistics.get(commentCategory) + 1);
-                }
-            }
-
-            countStatistics.putAll(initialStatistics);
+            // Si la catégorie est "All", initialiser toutes les catégories
+            Arrays.stream(Category.values())
+                    .forEach(cat -> countStatistics.put(cat, 0L));
         } else {
-            // Pour un traitement avec une catégorie spécifique (non "All")
-            Category categoryEnum = Category.valueOf(category);
-
-            // Récupérer tous les commentaires dans la période spécifiée
-            List<Comment> comments = commentRepository.findByDateCreateBetweenAndEnabledTrue(startDate, endDate);
-
-            // Initialiser la statistique pour cette catégorie
-            long count = 0;
-
-            // Mettre à jour les statistiques en fonction des commentaires
-            for (Comment comment : comments) {
-                if (comment != null && comment.getPoste() != null) {
-                    Category commentCategory = comment.getPoste().getCategory();
-                    if (categoryEnum.equals(commentCategory)) {
-                        count++;
-                    }
-                }
+            try {
+                // Vérifier si la catégorie est valide
+                Category selectedCategory = Category.valueOf(category);
+                countStatistics.put(selectedCategory, 0L);
+            } catch (IllegalArgumentException e) {
+                System.err.println("Invalid category: " + category);
+                return countStatistics; // Retourne une carte vide si la catégorie est invalide
             }
-
-            countStatistics.put(categoryEnum, count);
         }
 
+        // Mettre à jour les statistiques en fonction des commentaires
+        for (Comment comment : comments) {
+            if (comment != null) {
+                Poste parentPoste = commentService.getParentPoste(comment);
+                if (parentPoste != null && parentPoste.getCategory() != null) {
+                    Category commentCategory = parentPoste.getCategory();
+
+                    // Vérifier si la catégorie doit être incluse dans les statistiques
+                    if ("All".equalsIgnoreCase(category) || commentCategory.name().equalsIgnoreCase(category)) {
+                        countStatistics.put(commentCategory, countStatistics.get(commentCategory) + 1);
+                        System.out.println("Category incremented: " + commentCategory);
+                    }
+                } else {
+                    System.out.println("Comment without valid category or parentPoste: " + comment);
+                }
+            }
+        }
+
+        System.out.println("Statistics generated: " + countStatistics);
         return countStatistics;
     }
+
+
 /////////////////////////////////////////groupe //////////////////////////////////////////////////////
 
     public Map<String, Object> getGroupsStatisticsByPeriod(Date startDate, Date endDate) {
@@ -809,23 +840,25 @@ public class StatisticsService {
 
         while (cal.getTime().before(endDate) || cal.getTime().equals(endDate)) {
             Date periodStart = cal.getTime();
+            System.out.println("Period Start: " + periodStart);  // Log pour la période de début
+
+            // Formater le nom du mois et l'année pour la clé **avant d'avancer d'un mois**
+            String key = MONTH_NAMES.get(cal.get(Calendar.MONTH)) + " " + cal.get(Calendar.YEAR);
+            System.out.println("Formatted Month Key: " + key);  // Log pour le mois formaté
 
             // Avancer d'un mois
             cal.add(Calendar.MONTH, 1);
 
             // Ajuster la fin de la période
             Date periodEnd = cal.getTime();
+            System.out.println("Period End (avant ajustement): " + periodEnd);  // Log pour la période de fin avant ajustement
 
             // Si periodEnd dépasse endDate, on limite la période à endDate
             if (periodEnd.after(endDate)) {
                 periodEnd = endDate;
+                System.out.println("Period End ajusté: " + periodEnd);  // Log si la période de fin est ajustée
             }
 
-            // Formater le nom du mois et l'année pour la clé
-            String key = MONTH_NAMES.get(cal.get(Calendar.MONTH) == 0 ? 11 : cal.get(Calendar.MONTH) - 1)
-                    + " " + cal.get(Calendar.YEAR);
-
-            // Ajouter les statistiques pour le mois courant
             monthlyStats.put(key, getStatisticsGroupeByPeriod(periodStart, periodEnd, category, PeriodType.WEEK));
         }
 

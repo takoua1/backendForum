@@ -66,7 +66,7 @@ public class User implements UserDetails {
     @Column(unique = true, nullable = false)
     private String email;
     private String pays;
-     private int tel;
+     private String tel;
     @Enumerated(EnumType.STRING)
     private Status status;
     private boolean emailVerified;
@@ -118,6 +118,7 @@ public class User implements UserDetails {
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Token> tokens;
+
 
 
     @Override

@@ -280,4 +280,10 @@ public Signale Signaler(Signale signale)
         );
         return signaleRepository.findByEnabledTrue(sort);
     }
+
+    public void deleteSignale(Long id)
+    {
+        Signale signale = signaleRepository.findById(id).orElseThrow(() -> new RuntimeException("Signale not found"));
+        signaleRepository.delete(signale);
+    }
 }

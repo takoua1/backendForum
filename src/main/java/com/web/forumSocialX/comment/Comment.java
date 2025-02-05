@@ -58,11 +58,6 @@ public class Comment {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
-    @Override
-    public String toString() {
-        return "Comment{" +
-                "id=" + id +
-                ", text='" + text + '\'' +
-                '}';
-    }
+
+
 }

@@ -7,7 +7,7 @@ COPY pom.xml .
 COPY src ./src
 
 # Compiler le projet
-RUN mvn clean package -DskipTests
+RUN mvn clean package -DskipTests -e
 
 # Étape 2 : Exécution avec une image légère
 FROM eclipse-temurin:17-jdk-alpine

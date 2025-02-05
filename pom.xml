@@ -8,6 +8,8 @@
 		<version>3.2.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+
+
 	<groupId>com.web</groupId>
 	<artifactId>forumSocialX</artifactId>
 
@@ -21,6 +23,17 @@
 	</properties>
 
 	<dependencies>
+
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
+
+		<!-- Si nécessaire, vous pouvez également ajouter une dépendance pour Jakarta WebSocket -->
+
+
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>

@@ -331,6 +331,33 @@ public class CommentService {
         Collections.reverse(hierarchy);
         return hierarchy;
     }
+
+
+    public Poste getParentPoste(Comment comment) {
+        Set<Comment> visited = new HashSet<>();
+        return getParentPosteRecursive(comment, visited);
+    }
+
+    private Poste getParentPosteRecursive(Comment comment, Set<Comment> visited) {
+        if (comment == null) {
+            return null;
+        }
+
+        // Vérifier si ce commentaire a déjà été visité pour éviter un cycle
+        if (visited.contains(comment)) {
+            throw new IllegalStateException("Cycle detected in the comment hierarchy");
+        }
+
+        visited.add(comment);
+
+        // Si le commentaire a un poste associé, le retourner
+        if (comment.getPoste() != null) {
+            return comment.getPoste();
+        }
+
+        // Si pas de poste, remonter vers le parent
+        return getParentPosteRecursive(comment.getParentComment(), visited);
+    }
 }
 
 

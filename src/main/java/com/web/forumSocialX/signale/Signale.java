@@ -1,7 +1,9 @@
 package com.web.forumSocialX.signale;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.web.forumSocialX.comment.Comment;
+import com.web.forumSocialX.messageMail.MessageMail;
 import com.web.forumSocialX.poste.Poste;
 import com.web.forumSocialX.user.User;
 import jakarta.persistence.*;
@@ -11,6 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -55,5 +58,8 @@ public class Signale {
     private User admin;
     @Column(nullable = false)
     private Boolean enabled = true;
+    @JsonIgnore
+    @OneToMany(mappedBy = "signale", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<MessageMail> messageMails;
 
 }

@@ -80,13 +80,14 @@ public class SecurityConfiguration   {
         config.setAllowCredentials(true);
         config.setAllowedOrigins(List.of(
                 "https://forum-socialx.vercel.app",
-                "http://localhost:4200",
+                "http://localhost:4200","http://localhost:4300","http://forum-social-x-frontend-takoua1-dev.apps.rm3.7wse.p1.openshiftapps.com",
                 "capacitor://localhost",
-                "http://localhost","http://192.168.1.14","http://192.168.1.17","http://10.0.2.2:8084","http://192.168.x.x:8084"
+                "http://localhost","http://192.168.1.14:8084","http://192.168.1.17:8084","http://10.0.2.2:8084","http://192.168.x.x:8084"
         ));
 
-        config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+        config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type", "X-Requested-With"));
         config.addAllowedMethod("*");
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;

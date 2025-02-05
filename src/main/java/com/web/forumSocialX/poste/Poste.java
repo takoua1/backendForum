@@ -54,12 +54,6 @@ public class Poste {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id_poste")
     public User user;
-    @Override
-    public String toString() {
-        return "Poste{" +
-                "id=" + id +
-                ", message='" + message + '\'' +
-                '}';
-    }
+
 
 }
